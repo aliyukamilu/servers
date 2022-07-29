@@ -4,27 +4,37 @@ import './App.css';
 
 function App() {
   const [data, setData] = React.useState(null);
-
+  const [pingmess, setPingmess] = React.useState(null);
+  
   React.useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
+      .then((data) => {
+        setData(data.message)
+      });
+
+
+    fetch("/pingMes")
+      .then((res) => res.json())
+      .then((data) => {
+        setPingmess(data.message)
+      });
   }, []);
 
-  function pingAPi() {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }
+  // function pingAPi() {
+  //   fetch("/api")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.message));
+  // }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>{!data ? "Loading..." : data.userId}</p>
-        <button onClick={pingAPi}>Ping Api</button>
+
+        <p>{!data ? "Loading..." : data}</p>
+        <p>{!pingmess ? "Loading ping Response..." : pingmess}</p>
+        {/* <button onClick={pingAPi}>Ping Api</button> */}
       </header>
     </div>
   );

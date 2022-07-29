@@ -5,21 +5,27 @@ let date = new Date().getMilliseconds();
 const axios = require('axios');
 
 
-var minutes = 1, the_interval = minutes * 60 * 1000;
+var minutes = 0.1, the_interval = minutes * 60 * 1000;
 const URL = 'https://auth-rock-and-art.herokuapp.com/api/auth/register/';
 
 function pingFirstServer() {
   date = date + 1
-  axios.post(URL, {
-    first_name: "Aliyu " + date,
-    last_name: "foo " + date,
-    password: "passsj" + date,
-    email: "aliyukamilu@gmail.com" + date
-  })
+  axios.get('http://localhost:5000/ping')
     .then(response => {
       console.log(response.data);
-    }).catch(err => console.error(err));
+
+      app.get("/api", (req, res) => {
+        res.json({ message: 'On premise server Pinged Server Connected' });
+      });
+      postAm()
+
+      setInterval(postAm, the_interval);
+    }).catch(err => {
+      console.error(err)
+      res.json({ message: `Their's an error. server not pinged, server is down.` });
+    });
 }
+pingFirstServer();
 
 
 function postAm() {
@@ -33,15 +39,14 @@ function postAm() {
   }).then(response => {
     console.log(response.data);
 
-    // app.get("/api", (req, res) => {
-    //   res.json({ message: response });
-    // });
+    app.get("/pingMes", (req, res) => {
+      res.json({ message: 'Server sent a report' });
+    });
   })
     .catch(err => console.error(err));
 }
 
-postAm()
-setInterval(postAm, the_interval);
+
 
 
 
